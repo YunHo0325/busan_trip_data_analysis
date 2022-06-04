@@ -1,0 +1,61 @@
+** Storage 
+
+1. 용어/개념 설명
+    - 저장장치 : 어떤 장치가 있고 어떤게 빠르다
+        - 그림/표 위주로 설명
+        - SSD SLC/MLC/TLC/QLC
+    - Typical storage hierarchy (계층 구조)
+    - metadata : 간단하게(메타데이터 뭐고 많아지면 어떻게 되는지)
+
+2. 이슈
+    - Key Issues In Efficient Big-Data Access
+        1) Role of Big data
+            : 대량의 데이터 발생하여 효율적으로 데이터 처리하는 수단이 필요
+        2) Role of Data Analytics
+        3) Role of optimal configuration
+        
+3. TAXONOMY
+    그림 보여주면서 간단하게 몇줄만
+
+4. driven optimizations
+    1) Semantics driven optimizations
+    2) Behavior driven optimizations
+
+--------------------------------
+5. 로컬리티 실행
+6. 근접 최적화
+------------------------------------
+
+7. 데이터 감소
+8. 효율적인 데이터 액세스를 위한 기타 고려 사항
+
+
+
+===================================================
+** IoT
+* IoT 논문
+1. ML/DL을 통한 IoT 이슈 해결 필요성 (Introduction)
+2. IoT Layer Overview(그림 설명)
+3. IoT 보안 위협
+-----------------------------------------
+4. 모델 종류
+    - 어떤 모델 썼고, 어떻게 사용 가능한지
+    (+) Network layer 까지
+
+-------------------------------------------
+5. IoT Layer 별로 보안 위협에 대해 ML/DL 적용한 연구
+    - 연구 2~3개 정도만
+6. ML/DL을 이용하여 해결할 수 있는 IoT 관련 이슈들
+7. ML/DL 이용한 방법에 대한 이슈들  
+
+
+
+
+
+1. IoT Layer(그림 설명)
+    - 어떤 공격이 있고 어떤 인공지능 알고리즘 썼는지(Survey 2~3개)
+
+
+
+2. IoT 이슈에 대해서 ML/DL의 방향성
+    - 어떻게 ML/DL을 적용해야 하는지
