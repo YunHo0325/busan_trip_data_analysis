@@ -12,15 +12,15 @@ import javax.sql.DataSource;
 
 import member.MemDataBean;
 
-public class PlaceDBBean{
+public class TransDBBean{
 	
-private static PlaceDBBean instance = new PlaceDBBean();
+private static TransDBBean instance = new TransDBBean();
 	
-	public static PlaceDBBean getInstance() {
+	public static TransDBBean getInstance() {
 		return instance;
 	}
 	
-	private PlaceDBBean() {}
+	private TransDBBean() {}
 	
 	private Connection getConnection() throws Exception{
 		Context initCtx = new InitialContext();
@@ -29,151 +29,33 @@ private static PlaceDBBean instance = new PlaceDBBean();
 		return (Connection) ds.getConnection();
 	}
 	
-	public List<PlaceDataBean> getPlaces(String GUGUN_NM) {
-		List<PlaceDataBean> placeList = null;
+	public List<TransDataBean> getTime(int pId) {
+		List<TransDataBean> transList = null;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
 			conn = getConnection();
-			String sql = "select * from placeInfo where GUGUN_NM=?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, GUGUN_NM);
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				placeList = new ArrayList<PlaceDataBean>();
-				do {
-					PlaceDataBean place = new PlaceDataBean();
-					place.setpId(rs.getInt("pId"));
-					place.setPLACE_NM(rs.getString("PLACE_NM"));
-					place.setGUGUN_NM(rs.getString("GUGUN_NM"));
-					place.setTRRSRT_LA(rs.getInt("TRRSRT_LA"));
-					place.setTRRSRT_LO(rs.getInt("TRRSRT_LO"));
-					place.setTRRSRT_ROAD_NM_ADDR(rs.getString("TRRSRT_ROAD_NM_ADDR"));
-					place.setTEL_NO(rs.getString("TEL_NO"));
-					place.setGRP_NM(rs.getString("GRP_NM"));
-					place.setSEASON_NM(rs.getString("SEASON_NM"));
-					place.setIEM_NM(rs.getString("IEM_NM"));
-					place.setCL_NM(rs.getString("CL_NM"));
-					place.setETC_CN(rs.getString("ETC_CN"));
-					place.setCreate_time(rs.getTimestamp("create_time"));
-					
-					placeList.add(place);
-				}while(rs.next());
-			}
-			
-			
-		}catch(Exception e) {
-			System.out.println("select Exception : "+e.getMessage());
-		}finally {
-			if(rs != null) {
-				try {
-					rs.close();
-				}catch(Exception ex) {
-					System.out.println("ResultSet release exception : "+ ex.getMessage());
-				}
-			}
-			if(pstmt != null) {
-				try {
-					pstmt.close();
-				}catch(Exception ex) {
-					System.out.println("pstmt release exception : "+ ex.getMessage());
-				}
-			}
-			if(conn != null) {
-				try {
-					conn.close();
-				}catch(Exception ex) {
-					System.out.println("connection release exception : "+ ex.getMessage());
-				}
-			}
-		}
-		
-		return placeList;
-	}
-	
-	public List<PlaceDataBean> getGUGUN(){
-		List<PlaceDataBean> placeList = null;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			conn = getConnection();
-			String sql = "select distinct(GUGUN_NM) from placeInfo";
-			pstmt = conn.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				placeList = new ArrayList<PlaceDataBean>();
-				do {
-					PlaceDataBean place = new PlaceDataBean();
-					place.setGUGUN_NM(rs.getString("GUGUN_NM"));
-					placeList.add(place);
-			
-				}while(rs.next());
-			}
-		}catch(Exception e) {
-			System.out.println("select Exception : "+e.getMessage());
-		}finally {
-			if(rs != null) {
-				try {
-					rs.close();
-				}catch(Exception ex) {
-					System.out.println("ResultSet release exception : "+ ex.getMessage());
-				}
-			}
-			if(pstmt != null) {
-				try {
-					pstmt.close();
-				}catch(Exception ex) {
-					System.out.println("pstmt release exception : "+ ex.getMessage());
-				}
-			}
-			if(conn != null) {
-				try {
-					conn.close();
-				}catch(Exception ex) {
-					System.out.println("connection release exception : "+ ex.getMessage());
-				}
-			}
-		}
-		
-		return placeList;
-	}
-	
-	public List<PlaceDataBean> detailPlace(int pId) {
-		List<PlaceDataBean> placeList = null;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			conn = getConnection();
-			String sql = "select * from placeInfo where pId = ?";
+			String sql = "select Time from transport where pId=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, pId);
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
-				placeList = new ArrayList<PlaceDataBean>();
+				transList = new ArrayList<TransDataBean>();
 				do {
-					PlaceDataBean place = new PlaceDataBean();
-					place.setpId(rs.getInt("pId"));
-					place.setPLACE_NM(rs.getString("PLACE_NM"));
-					place.setGUGUN_NM(rs.getString("GUGUN_NM"));
-					place.setTRRSRT_LA(rs.getInt("TRRSRT_LA"));
-					place.setTRRSRT_LO(rs.getInt("TRRSRT_LO"));
-					place.setTRRSRT_ROAD_NM_ADDR(rs.getString("TRRSRT_ROAD_NM_ADDR"));
-					place.setTEL_NO(rs.getString("TEL_NO"));
-					place.setGRP_NM(rs.getString("GRP_NM"));
-					place.setSEASON_NM(rs.getString("SEASON_NM"));
-					place.setIEM_NM(rs.getString("IEM_NM"));
-					place.setCL_NM(rs.getString("CL_NM"));
-					place.setETC_CN(rs.getString("ETC_CN"));
-					place.setCreate_time(rs.getTimestamp("create_time"));
+					TransDataBean trans = new TransDataBean();
+                    trans.settId(rs.getInt("tId"));
+					trans.setpId(rs.getInt("pId"));
+					trans.setPLACE_NM(rs.getString("PLACE_NM"));
+					trans.setTRRSRT_ROAD_NM_ADDR(rs.getString("TRRSRT_ROAD_NM_ADDR"));
+					trans.setCRSLK_ADDR(rs.getString("CRSLK_ADDR"));
+					trans.setCRSLK_ROAD_NM(rs.getString("CRSLK_ROAD_NM"));
+					trans.setCHILD_PRTC_ZONE_AT(rs.getString("CHILD_PRTC_ZONE_AT"));
+					trans.setCRSLK_LA(rs.getFloat("CRSLK_LA"));
+					trans.setCRSLK_LO(rs.getFloat("CRSLK_LO"));
 					
-					placeList.add(place);
-			
+					transList.add(trans);
 				}while(rs.next());
 			}
 			
@@ -207,68 +89,3 @@ private static PlaceDBBean instance = new PlaceDBBean();
 		return placeList;
 	}
 	
-	public List<PlaceDataBean> searchPlaces(String PLACE_NM) {
-		List<PlaceDataBean> placeList = null;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			conn = getConnection();
-			String sql = "select * from placeInfo where PLACE_NM = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, PLACE_NM);
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				placeList = new ArrayList<PlaceDataBean>();
-				do {
-					PlaceDataBean place = new PlaceDataBean();
-					place.setpId(rs.getInt("pId"));
-					place.setPLACE_NM(rs.getString("PLACE_NM"));
-					place.setGUGUN_NM(rs.getString("GUGUN_NM"));
-					place.setTRRSRT_LA(rs.getInt("TRRSRT_LA"));
-					place.setTRRSRT_LO(rs.getInt("TRRSRT_LO"));
-					place.setTRRSRT_ROAD_NM_ADDR(rs.getString("TRRSRT_ROAD_NM_ADDR"));
-					place.setTEL_NO(rs.getString("TEL_NO"));
-					place.setGRP_NM(rs.getString("GRP_NM"));
-					place.setSEASON_NM(rs.getString("SEASON_NM"));
-					place.setIEM_NM(rs.getString("IEM_NM"));
-					place.setCL_NM(rs.getString("CL_NM"));
-					place.setETC_CN(rs.getString("ETC_CN"));
-					place.setCreate_time(rs.getTimestamp("create_time"));
-					
-					placeList.add(place);
-			
-				}while(rs.next());
-			}
-			
-			
-		}catch(Exception e) {
-			System.out.println("select Exception : "+e.getMessage());
-		}finally {
-			if(rs != null) {
-				try {
-					rs.close();
-				}catch(Exception ex) {
-					System.out.println("ResultSet release exception : "+ ex.getMessage());
-				}
-			}
-			if(pstmt != null) {
-				try {
-					pstmt.close();
-				}catch(Exception ex) {
-					System.out.println("pstmt release exception : "+ ex.getMessage());
-				}
-			}
-			if(conn != null) {
-				try {
-					conn.close();
-				}catch(Exception ex) {
-					System.out.println("connection release exception : "+ ex.getMessage());
-				}
-			}
-		}
-		
-		return placeList;
-	}
-}
