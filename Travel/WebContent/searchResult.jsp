@@ -3,6 +3,7 @@
 <%@ page import = "java.sql.*" %>
 <%@ page import = "member.*" %>
 <%@ page import = "place.*" %>
+<%@ page import = "transport.*" %>
 <%@ page import = "java.util.*" %>
 <%
 	request.setCharacterEncoding("utf-8");
@@ -223,7 +224,10 @@
 							<td id="element_grade">평점 <%=avg %></td>
 						</tr>
 						<tr>
-							<td>도보 : </td>
+						TransDBBean transBean = TransDBBean.getInstance();
+						int time = transBean.getTime(place.getpId());
+							
+							<td>도보 : <%=time %></td>
 						</tr>
 					</table>
 					</li>
