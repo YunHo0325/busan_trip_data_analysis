@@ -36,6 +36,10 @@
       wish = wishList.get(0);   
    }
    
+   ConsumptionDBBean consumptionBean = ConsumptionDBBean.getInstance();
+   int cRanking = consumptionBean.consumptionRanking(place.getPLACE_NM());
+   
+   
    
 %>
 
@@ -194,7 +198,7 @@
             <span id="side_name"><%=place.getGUGUN_NM() %></span><br>
 				<ul id="side_ul">
 					<li onClick="location.href='country_main.jsp?GUGUN_NM=<%=place.getGUGUN_NM() %>'">홈</li>
-					<li onClick="location.href='countryDetail.jsp?GUGUN_NM=<%=place.getGUGUN_NM() %>'">기본정보</li>
+					<%-- <li onClick="location.href='countryDetail.jsp?GUGUN_NM=<%=place.getGUGUN_NM() %>'">기본정보</li> --%>
 					<li onClick="location.href='place.jsp?GUGUN_NM=<%=place.getGUGUN_NM() %>'"id="side_ul_now">명소</li>
 				</ul>
          </div>
@@ -258,7 +262,7 @@
                </tr>
                <tr>
                		<td>
-               			소비 순위 0위
+               			소비 순위 <%=cRanking %>위
                		</td>
                </tr>
                <tr>

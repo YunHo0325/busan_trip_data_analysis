@@ -244,10 +244,13 @@ public class HashTagDBBean {
 		try {
 			conn = getConnection();
 			
-			String search_text2 = hashTag_li[0];
-			for(int i=1; i<hashTag_li.length; i++)
-				search_text2 += "', '" + hashTag_li[i];
-			
+			String search_text2 = "";
+			if(hashTag_li != null) {
+				search_text2 = hashTag_li[0];
+				for(int i=1; i<hashTag_li.length; i++)
+					search_text2 += "', '" + hashTag_li[i];
+			}
+
 			String sql = "select distinct(h.pId)"
 					+ "from hashtag h join placeInfo p on h.pId = p.pId "
 					+ "where p.PLACE_NM like '%"+search_text+"%' or hashTag in ('"+search_text2+"')";

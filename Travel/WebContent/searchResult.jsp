@@ -3,20 +3,25 @@
 <%@ page import = "java.sql.*" %>
 <%@ page import = "member.*" %>
 <%@ page import = "place.*" %>
-<%@ page import = "country.*" %>
-<%@ page import = "city.*" %>
 <%@ page import = "java.util.*" %>
 <%
 	request.setCharacterEncoding("utf-8");
 	String uId = (String)session.getAttribute("uId");
 
 	String search_text = null;
+	String [] hashTag_li = null;
+	String hashTag_s = "";
+	int searchId = 0;
 	
+	MemDataBean member = null;
+	List<HashTagDataBean> hashTagList = null;
+	
+	if(request.getParameter("searchId") != null)
+		searchId = Integer.parseInt(request.getParameter("searchId"));
+
 	if(request.getParameter("search_text") != null)
 		search_text = request.getParameter("search_text");
 
-	String [] hashTag_li = null;
-	String hashTag_s = "";
 
 	HashTagDBBean hashTagBean = HashTagDBBean.getInstance();
 	List<HashTagDataBean> tagTypeList = hashTagBean.getTagType();
@@ -27,18 +32,16 @@
 
 	MemDBBean dbBean = MemDBBean.getInstance();
 	List<MemDataBean> memList = dbBean.searchMembers(uId);
-	MemDataBean member = null;
 	if(memList != null)
 		 member = memList.get(0);
 
 	PlaceDBBean dbBean2 = PlaceDBBean.getInstance();
 	WishDBBean wishBean = WishDBBean.getInstance();
 
-	List<HashTagDataBean> hashTagList = null;
 	if(search_text != null)
 		hashTagList = hashTagBean.searchHashTags(search_text);
 
-	if(hashTag_li != null)
+	if(search_text != null || hashTag_li != null)
 		hashTagList = hashTagBean.searchManyHashTags(search_text, hashTag_li);
 %>
 
@@ -62,7 +65,7 @@
 			margin : 0 auto;
 			text-align : left;
 		}
-		#main_content{
+		#main_content, #statistic{
 			width : 1200px;
 			line-height:45px;
 			padding:0;
@@ -113,6 +116,37 @@
 	<div id="content">
 		<section>
 			<div id="main">
+<%
+				if(hashTag_li != null){
+%>
+
+			<div id="statistic">
+				<span id="menu_name">추천 지역</span><br>
+				<ul id="place_ul">
+				<li>
+<%
+					for(int i=0; i<hashTag_li.length; i++){
+%>
+				<table id="element" class="table">
+					<tr>
+						<th><%=hashTag_li[i] %></th>
+						<td>
+<%
+							
+%>
+						</td>
+					</tr>
+				</table>
+<%
+					}
+%>
+
+				</li>
+				</ul>
+			</div>
+<%
+				}
+%>
 			<div id="main_content">
 				<span id="menu_name">명소</span><br>
 				

@@ -4,8 +4,6 @@
 <%@ page import = "java.sql.*" %>
 <%@ page import = "member.*" %>
 <%@ page import = "place.*" %>
-<%@ page import = "country.*" %>
-<%@ page import = "city.*" %>
 <%@ page import = "java.util.*" %>
 <%
 	request.setCharacterEncoding("utf-8");
@@ -23,7 +21,8 @@
 	    member = memList.get(0);
 	
 	PlaceDBBean dbBean2 = PlaceDBBean.getInstance();
-	List<PlaceDataBean> placeList = dbBean2.getPlaces(GUGUN_NM);
+	/* List<PlaceDataBean> placeList = dbBean2.getPlaces(GUGUN_NM); */
+	List<PlaceDataBean> placeList = dbBean2.getAllPlaces();
 	
 	WishDBBean wishBean = WishDBBean.getInstance();
 	
@@ -125,12 +124,12 @@
 	   }
 	   #element_hashtag{
 	      text-align : left;
-	      padding : 0 10px;
+	      padding : 0 5px;
 	   }
 	   #place_ul input[type=button]{
 	      height : 35px;
 	      line-height : 20px;
-	      margin : 5px;
+	      margin : 3px 1px;
 	   }
 	   a{
 	      color : black;
@@ -230,7 +229,7 @@
 			<table id="tb_place">
 				<tr>
 					<td></td>
-					<td width=80%>
+					<td width=90%>
 					<ul id="place_ul">
 <%
    if(placeList != null){
@@ -250,7 +249,7 @@
 			                     	</th>
                      				<td id="element_heart">
 <%
-                       				if(uId.equals("null") || uId == null){%>
+                       				if(uId == null){%>
                            				<img src="img/heart.png" id="heart_i" onClick="not_login()">
 <%
 			                        }else{

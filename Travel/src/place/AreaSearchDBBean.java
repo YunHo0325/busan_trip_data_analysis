@@ -1,4 +1,4 @@
-package city;
+package place;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,15 +10,15 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-public class CityDBBean {
 
-	private static CityDBBean instance = new CityDBBean();
+public class AreaSearchDBBean {
+	private static AreaSearchDBBean instance = new AreaSearchDBBean();
 	
-	public static CityDBBean getInstance() {
+	public static AreaSearchDBBean getInstance() {
 		return instance;
 	}
 	
-	private CityDBBean() {}
+	private AreaSearchDBBean() {}
 	
 	private Connection getConnection() throws Exception{
 		Context initCtx = new InitialContext();
@@ -27,27 +27,46 @@ public class CityDBBean {
 		return (Connection) ds.getConnection();
 	}
 	
-	public List<CityDataBean> getCities(String cId) {
-		List<CityDataBean> cityList = null;
-		Connection conn = null;
+	public int areaSearchRanking(String PLC_NM) {
+		List<AreaSearchDataBean> areaSearchList = null;
+		Connection conn = null; 
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		ResultSet rs = null; 
+		
+		int ranking = 1;
+		int ranking_flag = 0;
+		String find_str = PLC_NM.split(" ")[0];
+		String str = "";
 		try {
 			conn = getConnection();
-			String sql = "select * from city where cId=?";
+			String sql = "SELECT c.PLC_NM, SUM(c.CARD_UTILIIZA_CAS_CO) "
+					+ "FROM areaSearch c "
+					+ "GROUP BY c.PLC_NM "
+					+ "ORDER BY c.PLC_NM desc;";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, cId);
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
-				cityList = new ArrayList<CityDataBean>();
+				areaSearchList = new ArrayList<AreaSearchDataBean>();
 				do {
-					CityDataBean city = new CityDataBean();
-					city.setcId(rs.getString("cId"));
-					city.setCityId(rs.getString("cityId"));
-					city.setCityName(rs.getString("cityName"));
-					cityList.add(city);
+					AreaSearchDataBean areaSearch = new AreaSearchDataBean();
+					str = rs.getString("PLC_NM");
+					areaSearch.setPLC_NM(rs.getString("PLC_NM"));
+					areaSearch.setSumValue(rs.getLong("SUM(c.CARD_UTILIIZA_CAS_CO)"));
+					areaSearchList.add(areaSearch);
+					
+					if(str.contains(find_str)) {
+						ranking_flag = 1;
+						break;
+					}
+					else {
+						ranking += 1;
+					}
 				}while(rs.next());
+				
+				if(ranking_flag == 0) {
+					ranking = -1;
+				}
 			}
 			
 			
@@ -77,6 +96,7 @@ public class CityDBBean {
 			}
 		}
 		
-		return cityList;
+		return ranking;
 	}
+	
 }

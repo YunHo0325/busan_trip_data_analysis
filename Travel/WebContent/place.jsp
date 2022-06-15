@@ -3,39 +3,32 @@
 <%@ page import = "java.sql.*" %>
 <%@ page import = "member.*" %>
 <%@ page import = "place.*" %>
-<%@ page import = "country.*" %>
-<%@ page import = "city.*" %>
 <%@ page import = "java.util.*" %>
 <%
 	request.setCharacterEncoding("utf-8");
-	String uId="";
-	if(request.getParameter("uId") != null)
-		uId=request.getParameter("uId");
-		
-	String cId = "";
-	if(request.getParameter("cId") != null){
-		cId = request.getParameter("cId");
-	}
+	String uId = (String)session.getAttribute("uId");
 
 	MemDBBean dbBean = MemDBBean.getInstance();
-	List<MemDataBean> memList = dbBean.searchMembers("uId", uId);
+	List<MemDataBean> memList = dbBean.searchMembers(uId);
 	MemDataBean member = null;
 	if(memList != null)
 		 member = memList.get(0);
-	
-	
-	CountryDBBean countryBean = CountryDBBean.getInstance();
-	List<CountryDataBean> countryList = countryBean.detailCountry(cId);
-	CountryDataBean country = null;
-	if(countryList != null){
-		country = countryList.get(0);
+
+	String GUGUN_NM = null;
+	if(request.getParameter("GUGUN_NM") != null){
+		GUGUN_NM = request.getParameter("GUGUN_NM");
 	}
-	
-	CityDBBean cityBean = CityDBBean.getInstance();
-	List<CityDataBean> cityList = cityBean.getCities(cId);
+
+	PlaceDBBean placeBean = PlaceDBBean.getInstance();
+	List<PlaceDataBean> GUGUNList = placeBean.getGUGUN();
 	
 	PlaceDBBean dbBean2 = PlaceDBBean.getInstance();
-	List<PlaceDataBean> placeList = dbBean2.getPlaces(cId);
+	
+	List<PlaceDataBean> placeList = null;
+	if(GUGUN_NM.equals("all"))
+		placeList = dbBean2.getAllPlaces();
+	else
+		placeList = dbBean2.getPlaces(GUGUN_NM);
 	
 	WishDBBean wishBean = WishDBBean.getInstance();
 	
@@ -100,43 +93,50 @@
 			 text-decoration:none;
 		}
 	</style>
-	<script type="text/javascript" src="fun_script.js">
+	<script type="text/javascript" src="js/fun_script.js">
+	</script>
+	
+	<script>
+		function changeArea(){
+		    var langSelect = document.getElementById("select_local");
+		    var selectValue = langSelect.options[langSelect.selectedIndex].value;
+		    
+		    var url = "place.jsp?GUGUN_NM="+selectValue;
+			location.href=url;
+		}
 	</script>
 </head>
 <body>
 	<div id="content">
 		<aside>
 			<div id="side">
-				<div id="side_name"><%=country.getcName() %></div><br>
-<%
-	if(member != null){
-%>
+				<div id="side_name"><%=GUGUN_NM %></div><br>
+				
 				<ul id="side_ul">
-					<li onClick="location.href='country_main.jsp?uId=<%=member.getuId() %>&cId=<%=country.getcId() %>'">홈</li>
-					<li onClick="location.href='countryDetail.jsp?uId=<%=member.getuId() %>&cId=<%=country.getcId() %>'">기본정보</li>
-					<li onClick="location.href='place.jsp?uId=<%=member.getuId() %>&cId=<%=country.getcId() %>'"id="side_ul_now">명소</li>
+					<li onClick="location.href='country_main.jsp?GUGUN_NM=<%=GUGUN_NM %>'">홈</li>
+					<li onClick="location.href='countryDetail.jsp?GUGUN_NM=<%=GUGUN_NM %>'">기본정보</li>
+					<li onClick="location.href='place.jsp?GUGUN_NM=<%=GUGUN_NM %>'" id="side_ul_now">명소</li>
 				</ul>
-<%}else{%>
-				<ul id="side_ul">
-					<li onClick="location.href='country_main.jsp?cId=<%=country.getcId() %>'">홈</li>
-					<li onClick="location.href='countryDetail.jsp?cId=<%=country.getcId() %>'">기본정보</li>
-					<li onClick="location.href='place.jsp?cId=<%=country.getcId() %>'" id="side_ul_now">명소</li>
-				</ul>
-<%} %>
 			</div>
 		</aside>
 		<section>
 			<div id="main">
 				<span id="menu_name">명소</span><br>
-				<select id="local" class="custom-select">
+				<select id="select_local" class="custom-select" onchange="changeArea()">
 					<option value="all">전체</option>
 <%
-	if(cityList != null){
-		for(int i=0; i<cityList.size(); i++){
-			CityDataBean city = cityList.get(i);
+	if(GUGUNList != null){
+		for(int i=0; i<GUGUNList.size(); i++){
+			PlaceDataBean g = GUGUNList.get(i);
+			if(g.getGUGUN_NM().equals(GUGUN_NM)){
 %>				
-					<option><%=city.getCityName() %></option>
+					<option value="<%=g.getGUGUN_NM() %>" selected><%=g.getGUGUN_NM() %></option>
 <%
+			}else{
+%>
+					<option value="<%=g.getGUGUN_NM() %>"><%=g.getGUGUN_NM() %></option>
+<%
+			}
 	}}
 %>
 				</select>
@@ -152,10 +152,10 @@
 					<table id="element" class="">
 						<tr height=80px>
 							<th rowspan=4 width=400px>
-								<img src="<%=place.getpImg() %>" width=400px height=250px alt="place1">
+								<img src="<%=place.getImg() %>" width=400px height=250px alt="place1">
 							</th>
 							<th id="element_name">
-								<a href="placeDetail.jsp?uId=<%=request.getParameter("uId") %>&cId=<%=cId %>&pId=<%=place.getpId() %>"><%=place.getpName() %></a>									
+								<a href="placeDetail.jsp?pId=<%=place.getpId() %>"><%=place.getPLACE_NM() %></a>									
 <%
 								if(uId == null || uId.equals("null")){%>
 									<img src="img/heart.png" id="heart_i" onClick="not_login()">
@@ -166,13 +166,9 @@
 									if(wishList != null){
 										wish = wishList.get(0);	
 	%>
-										<input type="hidden" id="uId" value="<%=uId %>">
-										<input type="hidden" id="cId" value="<%=cId %>">
 										<img src="img/heart_after.png" width=33px id="heart_i" alt="<%=place.getpId() %>" onClick="wish_f()">
 	<%								}else{
 	%>									
-										<input type="hidden" id="uId" value="<%=uId %>">
-										<input type="hidden" id="cId" value="<%=cId %>">
 										<img src="img/heart.png" width=33px id="heart_i" alt="<%=place.getpId() %>" onClick="wish_f()">	
 	<%} 
 								}
@@ -180,7 +176,7 @@
 							</th>
 						</tr>
 						<tr>
-							<td id="element_explain"><%=place.getpExplain() %></td>
+							<td id="element_explain"><%=place.getETC_CN() %></td>
 						</tr>
 						<tr height=40px>
 							<td id="element_hashtag">

@@ -36,20 +36,6 @@ function preSearch(){
 	
 	var referer = document.location.href;
 	var url = "searchResult.jsp?search_text="+paraSearch;
-	if(referer.includes("uId")){
-		var tmp1 = referer.split('?');
-		var tmp2 = tmp1[1].split('&');
-
-		var tmp3 = 0;
-		var i = 0;
-
-		while(!(tmp2[i].includes("uId="))) {
-			tmp3 = tmp2[i];
-		    i++;
-		}
-		tmp3 = tmp2[i];
-		url += "&"+tmp3;
-	}
 	location.href=url;
 }
 
@@ -59,20 +45,6 @@ function search_script(){
 	
 	var referer = document.location.href;
 	var url = "searchResult.jsp?choose="+tag;
-	if(referer.includes("uId")){
-		var tmp1 = referer.split('?');
-		var tmp2 = tmp1[1].split('&');
-
-		var tmp3 = 0;
-		var i = 0;
-
-		while(!(tmp2[i].includes("uId="))) {
-			tmp3 = tmp2[i];
-		    i++;
-		}
-		tmp3 = tmp2[i];
-		url += "&"+tmp3;
-	}
 	location.href=url;
 }
 
@@ -113,5 +85,13 @@ function go_main(){
 		tmp3 = tmp2[i];
 		url += "?"+tmp3;
 	}
+	location.href=url;
+}
+
+function changeArea(){
+    var langSelect = document.getElementById("selectbox");
+    var selectValue = langSelect.options[langSelect.selectedIndex].value;
+    
+    var url = "place.jsp?GUGUN_NM="+selectValue;
 	location.href=url;
 }

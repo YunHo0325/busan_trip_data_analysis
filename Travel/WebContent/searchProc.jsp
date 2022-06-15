@@ -3,8 +3,6 @@
 <%@ page import = "java.sql.*" %>
 <%@ page import = "member.*" %>
 <%@ page import = "place.*" %>
-<%@ page import = "country.*" %>
-<%@ page import = "city.*" %>
 <%@ page import = "java.util.*" %>
 
 <%
@@ -50,6 +48,7 @@
 
 <body>
 	<form name="searchForm" action="searchResult.jsp" method="GET">
+		<input type="hidden" id="searchId" name="searchId" value="">	
 	
 <%
 	if(search_text != null){
@@ -67,9 +66,9 @@
 		}
 	}
 %>
-		<input type="hidden" id="searchId" name="searchId" value="">	
 
 <script>
+	var sId = 0;
 	function tagStatistic(){
 		var hashTag_s = "<%=hashTag_s %>";
 	    $.ajax({
@@ -77,19 +76,16 @@
 	        method: "POST",
 	        data: { hashTag_s: hashTag_s},
 	        success : function(result){
-	        	var sId = result.sId;
+	        	sId = result.sId;
 				document.getElementById("searchId").setAttribute("value", sId);
+				document.searchForm.submit();
 	        }
 	    });
 	}
-	function submitForm(){
-		document.searchForm.submit();
-	}
 </script>
-		<script>
-		tagStatistic();
-		submitForm();
-		</script>
+<script>
+tagStatistic();
+</script>
 
 	</form>
 
