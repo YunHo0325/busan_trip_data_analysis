@@ -45,7 +45,7 @@ private static TransDBBean instance = new TransDBBean();
 				transList = new ArrayList<TransDataBean>();
 				do {
 					TransDataBean trans = new TransDataBean();
-                    trans.settId(rs.getInt("tId"));
+                    			trans.settId(rs.getInt("tId"));
 					trans.setpId(rs.getInt("pId"));
 					trans.setPLACE_NM(rs.getString("PLACE_NM"));
 					trans.setTRRSRT_ROAD_NM_ADDR(rs.getString("TRRSRT_ROAD_NM_ADDR"));
