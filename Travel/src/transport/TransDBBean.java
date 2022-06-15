@@ -29,8 +29,7 @@ private static TransDBBean instance = new TransDBBean();
 		return (Connection) ds.getConnection();
 	}
 	
-	public List<TransDataBean> getTime(int pId) {
-		List<TransDataBean> transList = null;
+	public int getTime(int pId) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -40,24 +39,7 @@ private static TransDBBean instance = new TransDBBean();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, pId);
 			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				transList = new ArrayList<TransDataBean>();
-				do {
-					TransDataBean trans = new TransDataBean();
-                    			trans.settId(rs.getInt("tId"));
-					trans.setpId(rs.getInt("pId"));
-					trans.setPLACE_NM(rs.getString("PLACE_NM"));
-					trans.setTRRSRT_ROAD_NM_ADDR(rs.getString("TRRSRT_ROAD_NM_ADDR"));
-					trans.setCRSLK_ADDR(rs.getString("CRSLK_ADDR"));
-					trans.setCRSLK_ROAD_NM(rs.getString("CRSLK_ROAD_NM"));
-					trans.setCHILD_PRTC_ZONE_AT(rs.getString("CHILD_PRTC_ZONE_AT"));
-					trans.setCRSLK_LA(rs.getFloat("CRSLK_LA"));
-					trans.setCRSLK_LO(rs.getFloat("CRSLK_LO"));
-					
-					transList.add(trans);
-				}while(rs.next());
-			}
+			time = rs.getInt("Time");
 			
 			
 		}catch(Exception e) {
@@ -86,6 +68,6 @@ private static TransDBBean instance = new TransDBBean();
 			}
 		}
 		
-		return placeList;
+		return time;
 	}
 	
