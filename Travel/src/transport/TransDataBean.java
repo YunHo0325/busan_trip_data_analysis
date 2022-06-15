@@ -12,6 +12,7 @@ public class PlaceDataBean {
 	private String CHILD_PRTC_ZONE_AT;
 	private float CRSLK_LA;
 	private float CRSLK_LO;
+	private int Time;
 
 	public int gettId() {
 		return tId;
@@ -68,5 +69,12 @@ public class PlaceDataBean {
 	}
 	public void setCRSLK_LO(float cRSLK_LO) {
 		CRSLK_LO = cRSLK_LO;
+	}
+	
+	public int getTime() {
+		return Time;
+	}
+	public void setTime(int time) {
+		Time = time;
 	}
 }
