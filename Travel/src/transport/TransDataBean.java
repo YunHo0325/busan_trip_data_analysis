@@ -3,6 +3,7 @@ package transport;
 import java.sql.*;
 
 public class PlaceDataBean {
+	private int tId;
 	private int pId;
 	private String PLACE_NM;
 	private String TRRSRT_ROAD_NM_ADDR;
@@ -12,7 +13,12 @@ public class PlaceDataBean {
 	private float CRSLK_LA;
 	private float CRSLK_LO;
 
-	
+	public int gettId() {
+		return tId;
+	}
+	public void settId(int tId) {
+		this.tId = tId;
+	}	
 	
 	public int getpId() {
 		return pId;
