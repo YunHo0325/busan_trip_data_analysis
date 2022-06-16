@@ -3,8 +3,6 @@
 <%@ page import = "java.sql.*" %>
 <%@ page import = "member.*" %>
 <%@ page import = "place.*" %>
-<%@ page import = "country.*" %>
-<%@ page import = "city.*" %>
 <%@ page import = "java.util.*" %>
 <%
    request.setCharacterEncoding("utf-8");
@@ -14,6 +12,11 @@
    int pId = -1;
    if(request.getParameter("pId") != null){
       pId = Integer.parseInt(request.getParameter("pId"));
+   }
+
+   String [] related_pId = null;
+   if(request.getParameterValues("related") != null){
+	   related_pId = request.getParameterValues("related");
    }
 
    MemDBBean dbBean = MemDBBean.getInstance();
@@ -28,6 +31,8 @@
    List<PlaceDataBean> placeList = placeBean.detailPlace(pId);
    PlaceDataBean place = placeList.get(0);
    String GUGUN_NM = place.getGUGUN_NM();
+   
+   List<PlaceDataBean> relatedPlaceList = placeBean.getPlacesBypId(related_pId);
    
    WishDBBean wishBean = WishDBBean.getInstance();
    List<WishDataBean> wishList = wishBean.searchWish(uId, pId);
@@ -60,7 +65,7 @@
       #main{
          display:table-cell;
          border-spacing:0;
-         width:1200px;
+         width:1600px;
          height : 560px;
          display:table-cell;
          padding: 50px 10px;
@@ -70,6 +75,49 @@
       #menu_name{
          font-size : 30px;
       }
+      
+	   #element_heart img
+	   {   
+	      width : 33px;
+	      height : 33px;
+	      margin : 0 10px 0 0;
+	      float : right;
+	   }
+	   #element_explain, #element_hashtag, #element_grade{
+	      font-size : 15px;
+	   }
+	   #element_hashtag{
+	      text-align : left;
+	      padding : 0 5px;
+	   }
+	   #place_ul input[type=button]{
+	      height : 35px;
+	      line-height : 20px;
+	      margin : 3px 1px;
+	   }
+	   #place_ul{
+	      list-style:none;
+	      width : 98%;
+	      height : 400px;
+	      padding:0;
+	      margin:10px 0 0 10px;
+	      font-size : 18px;
+	      text-shadow : 0 0 1px black;
+	   }
+	   #place_ul li{
+	      display : inline;
+	      float : left;
+	      width: 280px;
+	      height:370px;
+	      text-align : left;
+	      margin:0 0 0 10px;
+	      padding: 10px 0 0 0;
+	   }
+	   #place_ul input[type=button]{
+	      height : 35px;
+	      line-height : 20px;
+	      margin : 3px 1px;
+	   }
       #element{
          width : 100%;
       }
@@ -251,19 +299,110 @@
                   </td>
                </tr>
                <tr>
-					<td>
+               		<th id="element_name">
+               			소비 순위 : <%=cRanking %>위
+               		</th>
+               </tr>
+               <tr>
+					<th id="element_name">
 						연관 관광지
-					</td>
+					</th>
                </tr>
                <tr>
-               		<td>
+               <td colspan=2 width=90%>
+					<ul id="place_ul">
+<%
+   if(relatedPlaceList != null){
+      for(int i=0; i<relatedPlaceList.size(); i++){
+         PlaceDataBean relatedPlace = relatedPlaceList.get(i);
+%>
+						<li>
+							<table id="element">
+								<tr>
+									<td colspan=2 height=150px >
+										<img src="<%=relatedPlace.getImg() %>" width=260px height=150px alt="place1">
+			                     	</td>
+								</tr>
+                  				<tr height=50px>
+                     				<th id="element_name">
+			                        	<a href="placeDetail.jsp?pId=<%=relatedPlace.getpId() %>"><%=relatedPlace.getPLACE_NM() %></a>                           
+			                     	</th>
+                     				<td id="element_heart">
+<%
+                       				if(uId == null){%>
+                           				<img src="img/heart.png" id="heart_i" onClick="not_login()">
+<%
+			                        }else{
+		                           		wishList = wishBean.searchWish(uId, relatedPlace.getpId());
+		                           		wish = null;
+		                           		if(wishList != null){
+	                              			wish = wishList.get(0);   
+   %>
+                             			<input type="hidden" id="GUGUN_NM" value="<%=relatedPlace.getGUGUN_NM() %>">
+                              			<img src="img/heart_after.png" width=33px id="heart_i" alt="<%=relatedPlace.getpId() %>" onClick="wish_f()">
+   <%                        			}else{
+   %>                           
+                              			<input type="hidden" id="GUGUN_NM" value="<%=relatedPlace.getGUGUN_NM() %>">
+                              			<img src="img/heart.png" width=33px id="heart_i" alt="<%=relatedPlace.getpId() %>" onClick="wish_f()">   
+   <%									} 
+                       				}
+%>
+
+                     				</td>
+                  				</tr>
+                  				<tr>
+<%
+					         	GradeDBBean gradeBean = GradeDBBean.getInstance();
+					         	List<GradeDataBean> gradeList = gradeBean.getGrades(place.getpId());
+					         	int sum=0;
+					         	float avg=0;
+					         	if(gradeList != null){
+					            	for(int j=0; j<gradeList.size(); j++){
+					               		GradeDataBean grade = gradeList.get(j);
+					               		sum += grade.getpGrade();
+					            	}
+					            	avg = (float)sum/gradeList.size();
+					         	}
+%>
+                     				<th height=15px colspan=2 id="element_grade">평점 <%=avg %></th>
+                  				</tr>
+                  				<tr>
+                     				<td colspan=2 id="element_hashtag">
+<%
+						         	hashTagList = hashTagBean.detailHashTags(relatedPlace.getpId());
+					         		int random[] = new int [4];
+						         
+						         	for(int j=0; j<4; j++){
+						            	random[j] = (int)(Math.random()*hashTagList.size());
+						            	for(int k=0; k<j; k++){
+						               		if(random[k] == random[j]){
+					                  			j--;
+						                  		break;
+						               		}
+					            		}
+						         	}
+						         	for(int j=0; j<4; j++){
+						            	HashTagDataBean hashTag = hashTagList.get(random[j]);
+%>
+                        				<input type="button" class="btn btn-primary" value="#<%=hashTag.getHashTag() %>" onClick="search_script()">   
+<%									
+									} 
+%>                  
+                     				</td>
+                  				</tr>
+               			</table>
+               		</li>
+<%
+		}
+      }
+%>
+            	</ul>
+            	</td>
+               </tr>
+               <tr>
+               		<th id="element_name">
                			주변 편의 식당
-               		</td>
-               </tr>
-               <tr>
-               		<td>
-               			소비 순위 <%=cRanking %>위
-               		</td>
+               		</th>
                </tr>
                <tr>
                   <th   colspan=2 height=60px style="font-size:23px;vertical-align:bottom;">
@@ -410,7 +549,7 @@
 %>
             </table>
          </div>
-         <div id="near">
+         <%-- <div id="near">
             <ul id="near_ul">
 <%
    List<PlaceDataBean> placeList2 = placeBean.getPlaces(place.getGUGUN_NM());
@@ -440,7 +579,7 @@
                </li>
 <%}} %>
             </ul>
-         </div>
+         </div> --%>
       </section>
    </div>
    <footer>

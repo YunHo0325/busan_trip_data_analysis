@@ -250,10 +250,18 @@ public class HashTagDBBean {
 				for(int i=1; i<hashTag_li.length; i++)
 					search_text2 += "', '" + hashTag_li[i];
 			}
-
-			String sql = "select distinct(h.pId)"
+			
+			String sql = "";
+			if(search_text != null) {
+				sql = "select distinct(h.pId)"
 					+ "from hashtag h join placeInfo p on h.pId = p.pId "
-					+ "where p.PLACE_NM like '%"+search_text+"%' or hashTag in ('"+search_text2+"')";
+					+ "where p.PLACE_NM like '%"+search_text+"%' and hashTag in ('"+search_text2+"')";
+			}
+			else {
+				sql = "select distinct(h.pId)"
+					+ "from hashtag h join placeInfo p on h.pId = p.pId "
+					+ "where hashTag in ('"+search_text2+"')";
+			}
 			pstmt = conn.prepareStatement(sql);
 //			pstmt.setString(1, search_text);
 //			pstmt.setString(2, search_text2);

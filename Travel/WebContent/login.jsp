@@ -14,7 +14,7 @@
 	String referer = (String)request.getHeader("REFERER");
 %>
 
-<%@ include file="top1.jsp" %>
+<%@ include file="top2.jsp" %>
 
 <!DOCTYPE html>
 <html>

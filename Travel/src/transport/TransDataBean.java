@@ -2,7 +2,7 @@ package transport;
 
 import java.sql.*;
 
-public class PlaceDataBean {
+public class TransDataBean {
 	private int tId;
 	private int pId;
 	private String PLACE_NM;
@@ -13,21 +13,18 @@ public class PlaceDataBean {
 	private float CRSLK_LA;
 	private float CRSLK_LO;
 	private int Time;
-
 	public int gettId() {
 		return tId;
 	}
 	public void settId(int tId) {
 		this.tId = tId;
-	}	
-	
+	}
 	public int getpId() {
 		return pId;
 	}
 	public void setpId(int pId) {
 		this.pId = pId;
 	}
-
 	public String getPLACE_NM() {
 		return PLACE_NM;
 	}
@@ -46,7 +43,7 @@ public class PlaceDataBean {
 	public void setCRSLK_ADDR(String cRSLK_ADDR) {
 		CRSLK_ADDR = cRSLK_ADDR;
 	}
-	public int getCRSLK_ROAD_NM() {
+	public String getCRSLK_ROAD_NM() {
 		return CRSLK_ROAD_NM;
 	}
 	public void setCRSLK_ROAD_NM(String cRSLK_ROAD_NM) {
@@ -58,23 +55,24 @@ public class PlaceDataBean {
 	public void setCHILD_PRTC_ZONE_AT(String cHILD_PRTC_ZONE_AT) {
 		CHILD_PRTC_ZONE_AT = cHILD_PRTC_ZONE_AT;
 	}
-	public String getCRSLK_LA() {
+	public float getCRSLK_LA() {
 		return CRSLK_LA;
 	}
 	public void setCRSLK_LA(float cRSLK_LA) {
 		CRSLK_LA = cRSLK_LA;
 	}
-	public String getCRSLK_LO() {
+	public float getCRSLK_LO() {
 		return CRSLK_LO;
 	}
 	public void setCRSLK_LO(float cRSLK_LO) {
 		CRSLK_LO = cRSLK_LO;
 	}
-	
 	public int getTime() {
 		return Time;
 	}
 	public void setTime(int time) {
 		Time = time;
 	}
+
+	
 }

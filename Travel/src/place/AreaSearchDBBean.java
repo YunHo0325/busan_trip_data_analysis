@@ -27,48 +27,39 @@ public class AreaSearchDBBean {
 		return (Connection) ds.getConnection();
 	}
 	
-	public int areaSearchRanking(String PLC_NM) {
+	public List<AreaSearchDataBean> areaSearch(int sId, String hashTag) {
 		List<AreaSearchDataBean> areaSearchList = null;
 		Connection conn = null; 
 		PreparedStatement pstmt = null;
 		ResultSet rs = null; 
-		
-		int ranking = 1;
-		int ranking_flag = 0;
-		String find_str = PLC_NM.split(" ")[0];
-		String str = "";
+
+
 		try {
 			conn = getConnection();
-			String sql = "SELECT c.PLC_NM, SUM(c.CARD_UTILIIZA_CAS_CO) "
-					+ "FROM areaSearch c "
-					+ "GROUP BY c.PLC_NM "
-					+ "ORDER BY c.PLC_NM desc;";
+			String sql = "select * "
+					+ "from areaStatistic "
+					+ "where sId=? and hashTag=? "
+					+ "order by countTag desc";
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, sId);
+			pstmt.setString(2, hashTag);
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
 				areaSearchList = new ArrayList<AreaSearchDataBean>();
 				do {
 					AreaSearchDataBean areaSearch = new AreaSearchDataBean();
-					str = rs.getString("PLC_NM");
-					areaSearch.setPLC_NM(rs.getString("PLC_NM"));
-					areaSearch.setSumValue(rs.getLong("SUM(c.CARD_UTILIIZA_CAS_CO)"));
-					areaSearchList.add(areaSearch);
+					areaSearch.setAsId(rs.getInt("asId"));
+					areaSearch.setsId(rs.getInt("sId"));
+					areaSearch.setHashTag(rs.getString("hashTag"));
+					areaSearch.setArea(rs.getString("area"));
+					areaSearch.setCountTag(rs.getInt("countTag"));
+					areaSearch.setSearch_time(rs.getTimestamp("search_time"));
 					
-					if(str.contains(find_str)) {
-						ranking_flag = 1;
-						break;
-					}
-					else {
-						ranking += 1;
-					}
+					areaSearchList.add(areaSearch);
 				}while(rs.next());
-				
-				if(ranking_flag == 0) {
-					ranking = -1;
-				}
 			}
-			
+		
 			
 		}catch(Exception e) {
 			System.out.println("select Exception : "+e.getMessage());
@@ -96,7 +87,7 @@ public class AreaSearchDBBean {
 			}
 		}
 		
-		return ranking;
+		return areaSearchList;
 	}
 	
 }

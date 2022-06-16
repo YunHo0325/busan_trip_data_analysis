@@ -12,7 +12,7 @@
 
 	if(uId != null && uId.equals(pwd)){
 		session.setAttribute("uId", uId);
-		response.sendRedirect("main1.jsp");
+		response.sendRedirect("country_main.jsp");
 	}
 	else{
 %>

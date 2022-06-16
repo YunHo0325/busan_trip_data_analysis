@@ -7,25 +7,6 @@ function not_login(){
 	location.href="login.jsp";
 }
 	
-function wish_f(){		
-	var thisEle = event.target;
-	if(thisEle.src=="http://39.115.48.106:8085/Travel/img/heart.png"){
-		var paraUId = document.getElementById("uId").value;
-		var paraPId = thisEle.alt;
-		var paraCId = document.getElementById("cId").value;
-		window.location.href="wishAdd.jsp?uId="+paraUId+"&pId="+paraPId+"&cId="+paraCId;
-		document.getElementById("heart_i").src="img/heart_after.png";			
-	}
-	else if(thisEle.src=="http://39.115.48.106:8085/Travel/img/heart_after.png"){
-		var paraUId = document.getElementById("uId").value;
-		var paraPId = thisEle.alt;
-		var paraCId = document.getElementById("cId").value;
-		window.location.href="wishAdd.jsp?uId="+paraUId+"&pId="+paraPId+"&cId="+paraCId;
-		document.getElementById("heart_i").src="img/heart.png";	
-	}
-}
-
-
 function logout_script(){
 	alert("logout");
 	location.replace("main1.jsp");
@@ -44,7 +25,7 @@ function search_script(){
 	var tag = thisEle.replace("#", "");
 	
 	var referer = document.location.href;
-	var url = "searchResult.jsp?choose="+tag;
+	var url = "searchProc.jsp?choose="+tag;
 	location.href=url;
 }
 
@@ -66,6 +47,24 @@ function chooseOption(){
 	
 	
 }
+
+function wish_f(){		
+	var thisEle = event.target;
+	if(thisEle.src=="http://39.115.48.106:8085/Travel/img/heart.png"){
+		/*var paraUId = <%=uId >;*/
+		var paraPId = thisEle.alt;
+		alert(paraPid);
+		window.location.href="wishAdd.jsp?&pId="+paraPId;
+		document.getElementById("heart_i").src="img/heart_after.png";			
+	}
+	else if(thisEle.src=="http://39.115.48.106:8085/Travel/img/heart_after.png"){
+		/*var paraUId = <%=uId >;*/
+		var paraPId = thisEle.alt;
+		window.location.href="wishAdd.jsp?&pId="+paraPId;
+		document.getElementById("heart_i").src="img/heart.png";	
+	}
+}
+
 
 
 function go_main(){

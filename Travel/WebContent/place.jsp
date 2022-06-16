@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import = "java.sql.*" %>
 <%@ page import = "member.*" %>
+<%@ page import = "transport.*" %>
 <%@ page import = "place.*" %>
 <%@ page import = "java.util.*" %>
 <%
@@ -113,8 +114,8 @@
 				<div id="side_name"><%=GUGUN_NM %></div><br>
 				
 				<ul id="side_ul">
-					<li onClick="location.href='country_main.jsp?GUGUN_NM=<%=GUGUN_NM %>'">홈</li>
-					<li onClick="location.href='countryDetail.jsp?GUGUN_NM=<%=GUGUN_NM %>'">기본정보</li>
+					<li onClick="location.href='country_main.jsp'">홈</li>
+					<%-- <li onClick="location.href='countryDetail.jsp?GUGUN_NM=<%=GUGUN_NM %>'">기본정보</li> --%>
 					<li onClick="location.href='place.jsp?GUGUN_NM=<%=GUGUN_NM %>'" id="side_ul_now">명소</li>
 				</ul>
 			</div>
@@ -151,11 +152,11 @@
 				<td>
 					<table id="element" class="">
 						<tr height=80px>
-							<th rowspan=4 width=400px>
+							<th rowspan=5 width=400px>
 								<img src="<%=place.getImg() %>" width=400px height=250px alt="place1">
 							</th>
 							<th id="element_name">
-								<a href="placeDetail.jsp?pId=<%=place.getpId() %>"><%=place.getPLACE_NM() %></a>									
+								<a href="placeDetailProc.jsp?pId=<%=place.getpId() %>"><%=place.getPLACE_NM() %></a>									
 <%
 								if(uId == null || uId.equals("null")){%>
 									<img src="img/heart.png" id="heart_i" onClick="not_login()">
@@ -205,6 +206,13 @@
 			}
 %>
 							<td id="element_grade">평점 <%=avg %></td>
+						</tr>
+						<tr>
+<%
+						TransDBBean transBean = TransDBBean.getInstance();
+						int time = transBean.getTime(place.getpId());
+%>						
+							<td>대중교통과의 거리 : <%=time %>분</td>
 						</tr>
 					</table>
 					</td>

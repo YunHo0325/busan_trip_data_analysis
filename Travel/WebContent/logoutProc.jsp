@@ -6,5 +6,5 @@
 <script>
 
 	alert("logout");
-	/* location.replace("main1.jsp"); */
+	/* location.replace("country_main.jsp"); */
 </script>

@@ -5,14 +5,9 @@
 <%@ page import="java.util.*" %>
 <%
 	request.setCharacterEncoding("utf-8");
-	String uId = null;
-	if(request.getParameter("uId") != null){
-		uId = request.getParameter("uId");
-	}
-	String cId = null;
-	if(request.getParameter("cId") != null){
-		cId = request.getParameter("cId");
-	}
+	
+	String uId = (String)session.getAttribute("uId");
+
 	String pId = null;
 	if(request.getParameter("pId") != null){
 		pId = request.getParameter("pId");

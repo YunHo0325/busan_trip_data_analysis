@@ -44,6 +44,9 @@
 
 	if(search_text != null || hashTag_li != null)
 		hashTagList = hashTagBean.searchManyHashTags(search_text, hashTag_li);
+	
+	AreaSearchDBBean areaSearchBean = AreaSearchDBBean.getInstance();
+	List<AreaSearchDataBean> asList = null;
 %>
 
 <%@ include file = "top2.jsp" %>
@@ -77,6 +80,7 @@
 		}
 		
 		#place_ul{
+			
 			list-style:none;
 			width : 1200px;
 			line-height:45px;
@@ -87,6 +91,11 @@
 		}
 		#element{
 			width : 100%;
+		}
+		#element2{
+			width : 60%;
+			line-height:20px;
+			font-size : 15px;
 		}
 		#element_name{
 			font-size : 20px;
@@ -112,6 +121,53 @@
 		}
 	</style>
 	<script type="text/javascript" src="js/fun_script.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+		/* google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(drawChart);  
+		
+		function drawChart(id_name, sId) {
+			// Create the data table.
+			alert(id_name);
+			if(id_name != 'undefined'){
+			    $.ajax({
+			        url: "http://221.138.15.210:8081/search/AreaSearchData",  // flask 서버로 던진다.
+			        method: "POST",
+			        
+			        data: { id_name: id_name,
+			        		sId: sId},
+			        		
+			        success : function(result){
+			        	var chartData = new google.visualization.DataTable();
+			        	
+			        	chartData.addColumn('string', 'Area');
+			        	chartData.addColumn('number', 'Count');
+			        	chartData.addRows([
+			        		[result.result[0].area, result.result[0].cnt]
+			        	]);
+			        	//['result.result[0].area', 'result.result[0].cnt']
+			        	//	]);
+			        	
+			        	/* var data = new google.visualization.DataTable({
+			        		"cols" :[
+			        			{"id":"","label":"Area","pattern":"","type":"string"},
+			        			{"id":"","label":"Count","pattern":"","type":"number"}
+			        		],
+			        		"rows": result.result
+			        	}); */
+
+						var options = {'width':400, 'height':300};
+						
+						var chart = new google.visualization.PieChart(document.getElementById(id_name));
+						chart.draw(chartData, options);
+			        	
+			        }
+			    });
+			}
+		    
+		} */
+	</script>
 </head>
 <body>
 	<div id="content">
@@ -131,10 +187,32 @@
 				<table id="element" class="table">
 					<tr>
 						<th><%=hashTag_li[i] %></th>
-						<td>
 <%
-							
+							asList = areaSearchBean.areaSearch(searchId, hashTag_li[i]); 
 %>
+						<td>
+							<%-- <div  id="<%=hashTag_li[i] %>_chart" style="width:300px; height:250px"></div > --%>
+							<%-- <script>drawChart("<%=hashTag_li[i] %>_chart", <%=searchId %>);</script> --%>
+						</td>
+						<td>						
+							<table id="element2" class="table table-hover">
+<%
+							for(int j=0; j<asList.size()/2; j+=2){
+								AreaSearchDataBean as = asList.get(j);
+							%>
+									<tr>
+										<th scope="row"><%=as.getArea() %></th>
+										<td><%=as.getCountTag() %></td>
+<%
+								as = asList.get(j+1);
+%>
+										<th scope="row"><%=as.getArea() %></th>
+										<td><%=as.getCountTag() %></td>
+									<tr>
+<%
+							}
+%>
+							</table>
 						</td>
 					</tr>
 				</table>
@@ -172,7 +250,7 @@
 								<img src="<%=place.getImg() %>" width=400px height=250px alt="place1">
 							</th>
 							<th id="element_name">
-								<a href="placeDetail.jsp?&pId=<%=place.getpId() %>"><%=place.getPLACE_NM() %></a>									
+								<a href="placeDetailProc.jsp?&pId=<%=place.getpId() %>"><%=place.getPLACE_NM() %></a>									
 <%
 								if(uId == null){%>
 									<img src="img/heart.png" id="heart_i" onClick="not_login()">
@@ -224,10 +302,11 @@
 							<td id="element_grade">평점 <%=avg %></td>
 						</tr>
 						<tr>
+<%
 						TransDBBean transBean = TransDBBean.getInstance();
 						int time = transBean.getTime(place.getpId());
-							
-							<td>도보 : <%=time %></td>
+%>						
+							<td>대중교통과의 거리 : <%=time %>분</td>
 						</tr>
 					</table>
 					</li>
@@ -246,6 +325,7 @@
 
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/bootstrap.js"></script>3
+	
 </body>
 </html>

@@ -1,4 +1,4 @@
-package place;
+package transport;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +11,7 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import member.MemDataBean;
+import place.PlaceDataBean;
 
 public class TransDBBean{
 	
@@ -30,16 +31,34 @@ private static TransDBBean instance = new TransDBBean();
 	}
 	
 	public int getTime(int pId) {
+		List<TransDataBean> transList = null;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+		
+		
+		
+		int time = 0;
 		try {
 			conn = getConnection();
-			String sql = "select Time from transport where pId=?";
+			String sql = "select time from transport where pId=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, pId);
 			rs = pstmt.executeQuery();
-			time = rs.getInt("Time");
+			
+			
+			if(rs.next()) {
+				transList = new ArrayList<TransDataBean>();
+				do {
+					TransDataBean trans = new TransDataBean();
+					trans.setTime(rs.getInt("Time"));
+					
+					transList.add(trans);
+			
+				}while(rs.next());
+			}
+			
+			time = transList.get(0).getTime();
 			
 			
 		}catch(Exception e) {
@@ -70,4 +89,5 @@ private static TransDBBean instance = new TransDBBean();
 		
 		return time;
 	}
+}
 	

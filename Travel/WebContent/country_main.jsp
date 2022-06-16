@@ -112,6 +112,10 @@
 	   #element_name{
 	      font-size : 20px;
 	   }
+	   #element_name2{
+	      font-size : 30px;
+	      padding  : 0 0 0 50px;
+	   }
 	   #element_heart img
 	   {   
 	      width : 33px;
@@ -138,8 +142,18 @@
 	      color : #0174DF;
 	      text-decoration:none;
 	   }
-	   #tb_title{
-   			
+	   #div_recommand{
+   			margin : 50px 5px;
+	   }
+	   #div_search{
+	   		margin : 10px 70px 50px 70px;
+	   }
+	   #tb_serach{
+	   		width : 100%;
+	   }
+	   #search_text{
+	   		height : 50px;
+	   		width : 100%;
 	   }
 	</style>
 	<script type="text/javascript" src="js/fun_script.js">
@@ -176,12 +190,12 @@
 		<form name="form_search" action="searchProc.jsp" method="post">
 		<div id="div_search">
 			<table id="tb_serach">
-				<tr>
-					<td width=300px>
-       					<input type=text name="search_text" class="form-control" id="search_text" placeholder="search text">
+				<tr height=100px>
+					<td colspan=2>
+       					<input type=text id="search_text" name="search_text" class="form-control" id="search_text" placeholder="search text">
        				</td>
-       				<td>
-       					<input type=submit name="serach" value="검색" class="btn btn-dark" id="search_submit">
+       				<td width=100px>
+       					<input type=submit id="search_text" name="serach" value="검색" class="btn btn-dark" id="search_submit">
        				</td>
 				</tr>
 				<%
@@ -190,8 +204,8 @@
 						HashTagDataBean tagType = tagTypeList.get(i);
 				%>
 				<tr height="50px">
-					<th><%=tagType.getTagType() %></th>
-					<td>
+					<th width=100px><%=tagType.getTagType() %></th>
+					<td  colspan=2>
 					<%
 						List<HashTagDataBean> tagTypeDetailList = hashTagBean.getTagTypeDetail(tagType.getTagType());
 						for(int j=0; j<tagTypeDetailList.size(); j++){
@@ -208,22 +222,18 @@
 					}
 				}
 				%>
-				<tr>
-					<th>도보</th>
-					<td>
-						
-					</td>
-				</tr>
 			</table>
 		
 		</div>
 		</form>
          
+         
+         
         <div id="div_recommand">
 			<table id="tb_title">
 				<tr>
 					<td width=10%></td>
-					<th>추천장소</th>
+					<th id="element_name2">명소</th>
 				</tr>
 			</table>
 			<table id="tb_place">
@@ -245,7 +255,7 @@
 								</tr>
                   				<tr height=50px>
                      				<th id="element_name">
-			                        	<a href="placeDetail.jsp?pId=<%=place.getpId() %>"><%=place.getPLACE_NM() %></a>                           
+			                        	<a href="placeDetailProc.jsp?pId=<%=place.getpId() %>"><%=place.getPLACE_NM() %></a>                           
 			                     	</th>
                      				<td id="element_heart">
 <%
